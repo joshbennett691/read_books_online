@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import "./Books.css";
 
 export default class BookList extends Component {
   constructor(props) {
@@ -12,7 +13,7 @@ export default class BookList extends Component {
 
   componentDidMount() {
     axios
-      .get("http://localhost:8080/api/books")
+      .get("http://localhost:8080/api/books/approved")
       .then((res) => {
         this.setState({
           books: res.data,
@@ -29,6 +30,7 @@ export default class BookList extends Component {
       <table>
         <thead>
           <tr>
+            <th></th>
             <th>Title</th>
             <th>Author</th>
             <th>Description</th>
@@ -43,6 +45,9 @@ export default class BookList extends Component {
             this.state.books.map((book, index) => {
               return (
                 <tr key={index}>
+                  <td>
+                    <img src={book.photo} alt="Book Cover"></img>
+                  </td>
                   <td>{book.title}</td>
                   <td>{book.author}</td>
                   <td>{book.description}</td>

@@ -12,6 +12,14 @@ db.request = require("./request.model");
 db.state = require("./state.model");
 
 db.ROLES = ["user", "admin", "moderator"];
-db.STATES = ["waiting", "allocated", "revision", "authorization", "approved"];
+db.STATES = [
+  "initial",
+  "allocated",
+  "review",
+  "empReview",
+  "reqAuthorization",
+  "rejected",
+  "accepted",
+];
 
 module.exports = db;

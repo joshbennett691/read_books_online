@@ -1,0 +1,17 @@
+.FlexContainer {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  width: 65%;
+  height: 80vh;
+  overflow: auto;
+  flex-direction: row;
+}
+
+.FlexContainer div {
+  width: 100px;
+  height: 100px;
+  margin: 50px;
+}

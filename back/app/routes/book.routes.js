@@ -10,7 +10,7 @@ module.exports = (app) => {
   router.get("/", books.findAll);
 
   // Retrieve all published Books
-  router.get("/published", books.findAllPublished);
+  router.get("/approved", books.findAllApproved);
 
   // Retrieve a single Book with id
   router.get("/:id", books.findOne);

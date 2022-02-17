@@ -5,14 +5,14 @@ import "./App.css";
 
 import AuthService from "./services/auth.service";
 
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Home from "./components/Home";
-import Profile from "./components/Profile";
-import BoardUser from "./components/BoardUser";
-import BoardModerator from "./components/BoardModerator";
-import BoardAdmin from "./components/BoardAdmin";
-import Books from "./components/Books";
+import Login from "./components/Login/Login";
+import Register from "./components/Register/Register";
+import Home from "./components/Home/Home";
+import Profile from "./components/Profile/Profile";
+import BoardUser from "./components/BoardUser/BoardUser";
+import BoardModerator from "./components/BoardModerator/BoardModerator";
+import BoardAdmin from "./components/BoardAdmin/BoardAdmin";
+import Books from "./components/Books/Books";
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);

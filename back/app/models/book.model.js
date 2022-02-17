@@ -10,7 +10,8 @@ const Book = mongoose.model(
     year: Number,
     language: String,
     isbn: String,
-    published: Boolean,
+    photo: String,
+    approved: Boolean,
   })
 );
 

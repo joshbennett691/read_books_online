@@ -18,7 +18,7 @@ exports.create = (req, res) => {
     year: req.body.year,
     language: req.body.language,
     isbn: req.body.isbn,
-    published: req.body.published ? req.body.published : false,
+    approved: req.body.approved,
   });
 
   // Save Book in the database
@@ -131,8 +131,8 @@ exports.deleteAll = (req, res) => {
 };
 
 // Find all published Books
-exports.findAllPublished = (req, res) => {
-  Book.find({ published: true })
+exports.findAllApproved = (req, res) => {
+  Book.find({ approved: true })
     .then((data) => {
       res.send(data);
     })
