@@ -12,7 +12,7 @@ const User = mongoose.model(
         ref: "Role",
       },
     ],
-    requests: [],
+    requests: [{ type: mongoose.Schema.Types.ObjectId, ref: "Request" }],
   })
 );
 

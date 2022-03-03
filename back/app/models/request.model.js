@@ -8,12 +8,7 @@ const Request = mongoose.model(
       book: [{ type: mongoose.Schema.Types.ObjectId, ref: "Book" }],
       employee: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
       authorizer: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-      states: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "State",
-        },
-      ],
+      state: [{ type: mongoose.Schema.Types.ObjectId, ref: "State" }],
     },
     { timestamps: true }
   )

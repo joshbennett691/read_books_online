@@ -24,5 +24,8 @@ module.exports = (app) => {
   // Create a new Request
   router.delete("/", requests.deleteAll);
 
+  // Get all requests by specified issuer
+  router.get("/test/:issuer", requests.findAllByIssuer);
+
   app.use("/api/requests", router);
 };

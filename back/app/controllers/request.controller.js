@@ -145,3 +145,36 @@ exports.findAllPublished = (req, res) => {
       });
     });
 };
+
+// Find all Requests by issuer
+exports.findIssuerRequests = (req, res) => {
+  const issuer = req.query.issuer;
+  var condition = issuer
+    ? { issuer: { $regex: new RegExp(issuer), $options: "i" } }
+    : {};
+
+  Request.find(condition)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving requests.",
+      });
+    });
+};
+
+exports.findAllByIssuer = (req, res) => {
+  const issuer = req.params.issuer;
+  console.log(issuer);
+  Request.find({ issuer: issuer })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res
+        .status(500)
+        .send({ message: err.message || "Error when finding users reuqets" });
+    });
+};
