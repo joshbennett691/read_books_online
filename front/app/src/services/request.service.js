@@ -1,19 +1,20 @@
 import axios from "axios";
+import http from "../http-common";
 
 const getCurrentUser = () => {
   return JSON.parse(localStorage.getItem("user"));
 };
 
-const REQUEST_API_URL = "http://localhost:8080/api/requests/";
-const GET_ALL_REQUESTS_BY_USER =
-  "http://localhost:8080/api/requests/test/" + getCurrentUser().id;
+const API_URL = "http://localhost:8080/api/requests/";
+// const GET_ALL_REQUESTS_BY_USER =
+//   "http://localhost:8080/api/requests/test/" + getCurrentUser().id;
 const BOOK_API_URL = "http://localhost:8080/api/books/";
-const UPDATE_CURRENT_USER =
-  "http://localhost:8080/api/users/" + getCurrentUser().id;
+// const UPDATE_CURRENT_USER =
+//   "http://localhost:8080/api/users/" + getCurrentUser().id;
 
 const createRequest = (issuer, book, employee, authorizer, state) => {
   return axios
-    .post(REQUEST_API_URL, {
+    .post(API_URL, {
       issuer,
       book,
       employee,
@@ -26,26 +27,26 @@ const createRequest = (issuer, book, employee, authorizer, state) => {
     });
 };
 
-const findAllRequestsByIssuer = () => {
-  return axios.get(GET_ALL_REQUESTS_BY_USER).then((response) => {
+// const getRequest = (id) => {
+//   axios.get(API_URL + id).then((response) => {
+//     return response.data;
+//   });
+// };
+
+const getRequest = (id) => {
+  return http.get(`/requests/${id}`);
+};
+
+const findAllRequestsByIssuer = (issuerId) => {
+  return axios.get(API_URL + "test/" + issuerId).then((response) => {
     return response.data;
   });
 };
 
-const appendRequest = (requests) => {
+const editRequest = (issuerId, requests) => {
   return axios
-    .put(UPDATE_CURRENT_USER, {
+    .put(API_URL + issuerId, {
       requests: requests,
-    })
-    .then((response) => {
-      return response.data;
-    });
-};
-
-const testPut = (username) => {
-  return axios
-    .put(UPDATE_CURRENT_USER, {
-      username: username,
     })
     .then((response) => {
       return response.data;
@@ -90,13 +91,18 @@ const getCreatedRequest = () => {
   return JSON.parse(localStorage.getItem("request"));
 };
 
+const deleteRequest = (requestId) => {
+  axios.delete(`http://localhost:8080/api/requests/${requestId}`);
+};
+
 export default {
   createRequest,
   createBook,
-  appendRequest,
-  testPut,
+  getRequest,
+  editRequest,
   getCurrentUser,
   getCreatedBook,
   getCreatedRequest,
   findAllRequestsByIssuer,
+  deleteRequest,
 };

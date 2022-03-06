@@ -21,7 +21,7 @@ module.exports = (app) => {
   // Delete a Request with id
   router.delete("/:id", requests.delete);
 
-  // Create a new Request
+  // Delete all requests
   router.delete("/", requests.deleteAll);
 
   // Get all requests by specified issuer

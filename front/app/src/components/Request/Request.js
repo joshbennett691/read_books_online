@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-
 import RequestService from "../../services/request.service";
+
 const currentUser = RequestService.getCurrentUser();
 const currentRequest = RequestService.getCreatedRequest();
 const oldRequest = RequestService.getCreatedRequest();
@@ -47,9 +47,9 @@ const Request = (props) => {
       ).then((response) => {
         // setRequest(RequestService.getCreatedRequest._id);
       });
-      console.log("first test");
-      RequestService.findAllRequestsByIssuer();
-      console.log("second test");
+      // console.log("first test");
+      // RequestService.findAllRequestsByIssuer();
+      // console.log("second test");
     }
   }, [book, request]);
 

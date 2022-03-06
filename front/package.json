@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@rodrigowba/http-common": "^0.1.9"
+  }
+}

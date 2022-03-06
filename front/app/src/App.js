@@ -14,6 +14,7 @@ import BoardModerator from "./components/BoardModerator/BoardModerator";
 import BoardAdmin from "./components/BoardAdmin/BoardAdmin";
 import Books from "./components/Books/Books";
 import Request from "./components/Request/Request";
+import EditRequest from "./components/Request/EditRequest";
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -118,6 +119,7 @@ const App = () => {
           <Route exact path="/profile" component={Profile} />
           <Route exact path="/books" component={Books} />
           <Route exact path="/request" component={Request} />
+          <Route path="/request/:id" component={EditRequest} />
           <Route path="/user" component={BoardUser} />
           <Route path="/mod" component={BoardModerator} />
           <Route path="/admin" component={BoardAdmin} />
