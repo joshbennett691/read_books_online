@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import AuthService from "../../services/auth.service";
 import RequestService from "../../services/request.service";
 import axios from "axios";
 import UserService from "../../services/user.service";
 import BookService from "../../services/book.service";
+import EventBus from "../../common/EventBus";
+
 //===========================
 // //state ids:
 //   "620f227f5a6cfa6ef8038ecb" = initial
@@ -22,11 +24,34 @@ const BoardUser = () => {
   const [requests, setRequests] = useState([]);
   const [books, setBooks] = useState([]);
   const [currentRequest, setCurrentRequest] = useState(null);
+  const [content, setContent] = useState("");
+
   const [currentBook, setCurrentBook] = useState({});
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [searchTitle, setSearchTitle] = useState("");
+  const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
+    UserService.getUserBoard().then(
+      (response) => {
+        setContent("Requests");
+      },
+      (error) => {
+        const _content =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+
+        setContent("Invalid Access");
+
+        if (error.response && error.response.status === 401) {
+          EventBus.dispatch("logout");
+        }
+      }
+    );
+    isAuth();
     retrieveRequests();
     retrieveBooks();
     mapRequests();
@@ -308,9 +333,31 @@ const BoardUser = () => {
     ));
   };
 
+  //   const checkAuth = () => {
+  //     UserService.getUserBoard().then((response) => {
+  //       console.log(response.data);
+  //       if (response.data === "User Content.") {
+  //         setAuthorized(true);
+  //       }
+  //   }
+  // }
+
+  const isAuth = async () => {
+    await UserService.getUserBoard().then((response) => {
+      console.log(response.data);
+      if (response.data === "User Content.") {
+        setAuthorized(true);
+        return authorized;
+      } else {
+        setAuthorized(false);
+        return authorized;
+      }
+    });
+  };
+
   return (
     <div>
-      <h1>Requests</h1>
+      {/* <h1>Requests</h1>
       <Link to={"/request"} type="button" className="btn btn-secondary">
         Create New Request
       </Link>
@@ -331,7 +378,35 @@ const BoardUser = () => {
           </tr>
         </thead>
         <tbody>{renderRequests()}</tbody>
-      </table>
+      </table> */}
+      {isAuth() ? (
+        <div>
+          <h1>{content}</h1>
+          <Link to={"/request"} type="button" className="btn btn-secondary">
+            Create New Request
+          </Link>
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Author</th>
+                <th scope="col">Description</th>
+                <th scope="col">Category</th>
+                <th scope="col">Year</th>
+                <th scope="col">Language</th>
+                <th scope="col">Isbn</th>
+                <th scope="col">photo</th>
+                <th scope="col">State</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>{renderRequests()}</tbody>
+          </table>
+        </div>
+      ) : (
+        <Redirect to="/login" />
+      )}
     </div>
   );
 };

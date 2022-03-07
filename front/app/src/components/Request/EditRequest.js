@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import BookService from "../../services/book.service";
 import axios from "axios";
 import RequestService from "../../services/request.service";
+import AuthService from "../../services/auth.service";
 
 const EditRequest = (props) => {
   const initialRequestState = {
@@ -24,19 +25,25 @@ const EditRequest = (props) => {
     photo: "",
     approved: null,
   };
+  const currentUser = AuthService.getCurrentUser();
   const [currentRequest, setCurrentRequest] = useState(initialRequestState);
   const [currentBook, setCurrentBook] = useState(initialBookState);
   const [message, setMessage] = useState("");
+  const [cost, setCost] = useState(0);
+  const [costThreshold, setCostThreshold] = useState(50);
+  const [costMessage, setCostMessage] = useState("Awaiting Cost...");
 
   //props.match.params.id IS THE REQUEST ID NOT BOOK
 
   //currentRequest.book[0] IS THE ACCESSOR FOR BOOK ID
 
   useEffect(() => {
+    console.log(currentUser);
     // retrieveBook(props.match.params.id);
     retrieveRequest(props.match.params.id);
     retrieveBook(currentRequest.book[0]);
-    console.log("testffffddffffff");
+    console.log("testffffddffffssssfffaaaf");
+    console.log(currentRequest.state[0]);
   }, [props.match.params.id]);
 
   // const retrieveBook = async (id) => {
@@ -75,6 +82,19 @@ const EditRequest = (props) => {
       .catch((e) => {
         console.log(e);
       });
+  };
+
+  const updateState = async (request) => {
+    console.log(request.state[0]);
+    request.state[0] = "620f227f5a6cfa6ef8038ecd";
+    await setCurrentRequest(request);
+    await console.log(currentRequest);
+
+    await RequestService.updateRequest(request._id, request).then(
+      (response) => {
+        console.log(response.data);
+      }
+    );
   };
 
   const renderFormInput = (formItem) => {
@@ -182,14 +202,53 @@ const EditRequest = (props) => {
               />
             </div>
           </form>
-          <button
-            type="submit"
-            className="btn btn-secondary"
-            onClick={updateBook}
-          >
-            Update
-          </button>
-          <p>{message}</p>
+          {currentUser.roles[0] === "ROLE_USER" &&
+            currentRequest.state[0] === "620f227f5a6cfa6ef8038ecb" && (
+              <div>
+                <button
+                  type="submit"
+                  className="btn btn-secondary"
+                  onClick={updateBook}
+                >
+                  Update
+                </button>
+                <p>{message}</p>
+              </div>
+            )}
+          {currentUser.roles[0] === "ROLE_USER" &&
+            currentRequest.state[0] === "620f227f5a6cfa6ef8038ecd" && (
+              <div>
+                <button
+                  type="submit"
+                  className="btn btn-secondary"
+                  onClick={updateBook}
+                >
+                  Update
+                </button>
+                <p>{message}</p>
+              </div>
+            )}
+          {currentUser.roles[0] === "ROLE_MODERATOR" && (
+            <div>
+              <button
+                type="submit"
+                className="btn btn-secondary"
+                // onClick={updateBook}
+                onClick={() => updateState(currentRequest)}
+              >
+                Need More Info
+              </button>
+              <button
+                type="submit"
+                className="btn btn-secondary"
+                // onClick={updateBook}
+              >
+                {/* Calculating Cost... */}
+                {}
+              </button>
+              <p>{message}</p>
+            </div>
+          )}
         </div>
       ) : (
         <div>

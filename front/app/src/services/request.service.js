@@ -43,14 +43,8 @@ const findAllRequestsByIssuer = (issuerId) => {
   });
 };
 
-const editRequest = (issuerId, requests) => {
-  return axios
-    .put(API_URL + issuerId, {
-      requests: requests,
-    })
-    .then((response) => {
-      return response.data;
-    });
+const updateRequest = (id, data) => {
+  return http.put(`/requests/${id}`, data);
 };
 
 const createBook = (
@@ -95,14 +89,19 @@ const deleteRequest = (requestId) => {
   axios.delete(`http://localhost:8080/api/requests/${requestId}`);
 };
 
+const getAll = () => {
+  return http.get("/requests");
+};
+
 export default {
   createRequest,
   createBook,
   getRequest,
-  editRequest,
+  updateRequest,
   getCurrentUser,
   getCreatedBook,
   getCreatedRequest,
   findAllRequestsByIssuer,
   deleteRequest,
+  getAll,
 };
