@@ -1,39 +1,5 @@
 const db = require("../models");
-const Book = db.book;
-
-// Create and Save a new Book
-exports.create = (req, res) => {
-  // Validate request
-  if (!req.body.title) {
-    res.status(400).send({ message: "Content can not be empty!" });
-    return;
-  }
-
-  // Create a Book
-  const book = new Book({
-    title: req.body.title,
-    author: req.body.author,
-    description: req.body.description,
-    category: req.body.category,
-    year: req.body.year,
-    language: req.body.language,
-    isbn: req.body.isbn,
-    photo: req.body.photo,
-    approved: req.body.approved,
-  });
-
-  // Save Book in the database
-  book
-    .save(book)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while creating the Book.",
-      });
-    });
-};
+const State = db.state;
 
 // Retrieve all Books from the database.
 exports.findAll = (req, res) => {

@@ -284,10 +284,13 @@ const BoardModerator = () => {
           Allocate
         </button>
       );
-    } else if (request[1].state[0] === "620f227f5a6cfa6ef8038ecc") {
+    } else if (
+      request[1].state[0] === "620f227f5a6cfa6ef8038ecc" ||
+      request[1].state[0] === "620f227f5a6cfa6ef8038ece"
+    ) {
       return (
         <Link
-          to={`/request/manage/${request[1]._id}`}
+          to={`/request/${request[1]._id}`}
           type="button"
           className="btn btn-secondary"
         >
@@ -336,7 +339,9 @@ const BoardModerator = () => {
         <td>{retrieveBookYear(request[1].book)}</td>
         <td>{retrieveBookLanguage(request[1].book)}</td>
         <td>{retrieveBookIsbn(request[1].book)}</td>
-        <td>{retrieveBookPhoto(request[1].book)}</td>
+        <td>
+          <img src={retrieveBookPhoto(request[1].book)}></img>
+        </td>
         <td>{stateDetect(request)}</td>
         <td>{retrieveUserName(request[1].issuer)}</td>
         <td>{retrieveEmployeeName(request[1].employee)}</td>
@@ -395,9 +400,9 @@ const BoardModerator = () => {
       {isAuth() ? (
         <div>
           <h1>Requests</h1>
-          <Link to={"/request"} type="button" className="btn btn-secondary">
+          {/* <Link to={"/request"} type="button" className="btn btn-secondary">
             Create New Request
-          </Link>
+          </Link> */}
           <table className="table">
             <thead>
               <tr>

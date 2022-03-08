@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Link, Redirect } from "react-router-dom";
+
 import BookService from "../../services/book.service";
 import axios from "axios";
 import RequestService from "../../services/request.service";
@@ -31,7 +33,8 @@ const EditRequest = (props) => {
   const [message, setMessage] = useState("");
   const [cost, setCost] = useState(0);
   const [costThreshold, setCostThreshold] = useState(50);
-  const [costMessage, setCostMessage] = useState("Awaiting Cost...");
+  const [costMessage, setCostMessage] = useState("Purchase Book");
+  const [styleCost, setStyleCost] = useState("btn btn-success");
 
   //props.match.params.id IS THE REQUEST ID NOT BOOK
 
@@ -42,7 +45,7 @@ const EditRequest = (props) => {
     // retrieveBook(props.match.params.id);
     retrieveRequest(props.match.params.id);
     retrieveBook(currentRequest.book[0]);
-    console.log("testffffddffffssssfffaaaf");
+    console.log("testffffddffffsddsssfffaaaf");
     console.log(currentRequest.state[0]);
   }, [props.match.params.id]);
 
@@ -54,9 +57,12 @@ const EditRequest = (props) => {
   // };
 
   const handleInputChange = (event) => {
+    console.log(event);
     const { name, value } = event.target;
     setCurrentBook({ ...currentBook, [name]: value });
   };
+
+  const renderCostButton = () => {};
 
   const retrieveRequest = async (id) => {
     await RequestService.getRequest(id).then((response) => {
@@ -84,6 +90,25 @@ const EditRequest = (props) => {
       });
   };
 
+  const updateBookAfterInfo = async (request) => {
+    await BookService.update(currentBook._id, currentBook)
+      .then((response) => {
+        console.log(response.data);
+        setMessage("The Request was updated");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    request.state[0] = "620f227f5a6cfa6ef8038ece";
+    await setCurrentRequest(request);
+    await console.log(currentRequest);
+    await RequestService.updateRequest(request._id, request).then(
+      (response) => {
+        console.log(response.data);
+      }
+    );
+  };
+
   const updateState = async (request) => {
     console.log(request.state[0]);
     request.state[0] = "620f227f5a6cfa6ef8038ecd";
@@ -95,6 +120,51 @@ const EditRequest = (props) => {
         console.log(response.data);
       }
     );
+  };
+
+  const costHandle = async (request, book) => {
+    // book needs authorization
+    if (cost > 50) {
+      request.state[0] = "620f227f5a6cfa6ef8038ecf";
+      await setCurrentRequest(request);
+      await RequestService.updateRequest(request._id, request).then(
+        (response) => {}
+      );
+    } else {
+      request.state[0] = "620f227f5a6cfa6ef8038ed1";
+      await setCurrentRequest(request);
+      await RequestService.updateRequest(request._id, request).then(
+        (response) => {}
+      );
+    }
+  };
+
+  const acceptRequest = async (request, book) => {
+    request.state[0] = "620f227f5a6cfa6ef8038ed1";
+    await setCurrentRequest(request);
+    await RequestService.updateRequest(request._id, request).then(
+      (response) => {}
+    );
+  };
+
+  const rejectRequest = async (request, book) => {
+    request.state[0] = "620f227f5a6cfa6ef8038ed0";
+    await setCurrentRequest(request);
+    await RequestService.updateRequest(request._id, request).then(
+      (response) => {}
+    );
+  };
+
+  const costHandleOnChange = (event) => {
+    if (event.target.value > 50) {
+      setCostMessage("Needs Authorization");
+      setStyleCost("btn btn-danger");
+    } else if (event.target.value <= 50) {
+      setCostMessage("Purchase Book");
+      setStyleCost("btn btn-success");
+    }
+    setCost(event.target.value);
+    console.log(event.target.value);
   };
 
   const renderFormInput = (formItem) => {
@@ -201,6 +271,28 @@ const EditRequest = (props) => {
                 onChange={handleInputChange}
               />
             </div>
+            {currentUser.roles[0] === "ROLE_MODERATOR" && (
+              <div className="form-group">
+                <label htmlFor="cost">Cost</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="cost"
+                  name="cost"
+                  value={cost}
+                  onChange={costHandleOnChange}
+                  onClick={() => costHandle(currentRequest, currentBook)}
+                />
+                <Link
+                  to={"/mod"}
+                  type="button"
+                  className={styleCost}
+                  onClick={() => costHandle(currentRequest, currentBook)}
+                >
+                  {costMessage}
+                </Link>
+              </div>
+            )}
           </form>
           {currentUser.roles[0] === "ROLE_USER" &&
             currentRequest.state[0] === "620f227f5a6cfa6ef8038ecb" && (
@@ -215,13 +307,39 @@ const EditRequest = (props) => {
                 <p>{message}</p>
               </div>
             )}
+          {currentUser.roles[0] === "ROLE_ADMIN" && (
+            <div>
+              <Link
+                to={"/admin"}
+                type="button"
+                className="btn btn-success"
+                onClick={() => acceptRequest(currentRequest)}
+              >
+                Accept
+              </Link>
+              <p>{message}</p>
+            </div>
+          )}
+          {currentUser.roles[0] === "ROLE_ADMIN" && (
+            <div>
+              <Link
+                to={"/admin"}
+                type="button"
+                className="btn btn-danger"
+                onClick={() => rejectRequest(currentRequest)}
+              >
+                Reject
+              </Link>
+              <p>{message}</p>
+            </div>
+          )}
           {currentUser.roles[0] === "ROLE_USER" &&
             currentRequest.state[0] === "620f227f5a6cfa6ef8038ecd" && (
               <div>
                 <button
                   type="submit"
                   className="btn btn-secondary"
-                  onClick={updateBook}
+                  onClick={() => updateBookAfterInfo(currentRequest)}
                 >
                   Update
                 </button>
@@ -230,22 +348,28 @@ const EditRequest = (props) => {
             )}
           {currentUser.roles[0] === "ROLE_MODERATOR" && (
             <div>
+              {/* <label for="cost">Cost:</label>
+              <input type="text" id="cost" name="cost"></input>
+              <br />
+              <br /> */}
+
               <button
                 type="submit"
                 className="btn btn-secondary"
-                // onClick={updateBook}
                 onClick={() => updateState(currentRequest)}
               >
                 Need More Info
               </button>
-              <button
+              {/* <button
                 type="submit"
-                className="btn btn-secondary"
-                // onClick={updateBook}
+                className="btn btn-danger"
+                value={cost}
+                onClick={costHandle}
+                onChange={costHandleOnChange}
               >
-                {/* Calculating Cost... */}
-                {}
-              </button>
+                {costMessage}
+              </button> */}
+
               <p>{message}</p>
             </div>
           )}

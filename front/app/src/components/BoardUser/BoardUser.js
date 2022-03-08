@@ -324,7 +324,9 @@ const BoardUser = () => {
         <td>{retrieveBookYear(request[1].book)}</td>
         <td>{retrieveBookLanguage(request[1].book)}</td>
         <td>{retrieveBookIsbn(request[1].book)}</td>
-        <td>{retrieveBookPhoto(request[1].book)}</td>
+        <td>
+          <img src={retrieveBookPhoto(request[1].book)}></img>
+        </td>
 
         <td>{stateDetect(request)}</td>
         <td>{canEdit(request)}</td>
