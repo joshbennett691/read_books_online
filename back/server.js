@@ -1,15 +1,22 @@
 const express = require("express");
 const cors = require("cors");
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const http = require("http");
 const dbConfig = require("./app/config/db.config");
 var bcrypt = require("bcryptjs");
 
 const app = express();
 
+const server = http.createServer(app);
+
 var corsOptions = {
   origin: "http://localhost:8081",
 };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+
+app.use(cors());
 
 // parse requests of content-type - application/json
 app.use(express.json());
@@ -19,10 +26,12 @@ app.use(express.urlencoded({ extended: true }));
 
 const db = require("./app/models");
 const { mongoose } = require("./app/models");
+// const { Server } = require("http");
 const Book = db.book;
 const Role = db.role;
 const State = db.state;
 const User = db.user;
+const Chat = db.chat;
 
 db.mongoose
   .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
@@ -34,7 +43,6 @@ db.mongoose
     initial();
     initializeBook();
     initializeStates();
-    initializeUsers();
   })
   .catch((err) => {
     console.error("Connection error", err);
@@ -49,14 +57,41 @@ app.get("/", (req, res) => {
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/book.routes")(app);
+require("./app/routes/chat.routes")(app);
 require("./app/routes/request.routes")(app);
 require("./app/routes/existingUser.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}.`);
+// });
+
+const httpServer = createServer(app);
+
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:8081",
+    methods: ["GET", "POST"],
+  },
 });
+io.on("connection", (socket) => {
+  socket.on("join_room", (data) => {
+    socket.join(data);
+    console.log(`user with id: ${socket.id} joined room ${data}`);
+  });
+
+  socket.on("send_message", (data) => {
+    console.log(data);
+    socket.to(data.room).emit("receive_message", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("user disconnected", socket.id);
+  });
+});
+
+httpServer.listen(PORT);
 
 function initial() {
   Role.estimatedDocumentCount((err, count) => {
@@ -260,121 +295,6 @@ function initializeBook() {
           console.log("error", err);
         }
         console.log("created book collection");
-      });
-    }
-  });
-}
-
-function initializeUsers() {
-  User.estimatedDocumentCount((err, count) => {
-    if (!err && count === 0) {
-      new User({
-        username: "user1",
-        email: "user1@email.com",
-        password: bcrypt.hashSync("password"),
-        roles: ["620f227f5a6cfa6ef8038ec5"],
-        requests: [],
-      }).save((err) => {
-        if (err) {
-          console.log("error", err);
-        }
-        console.log("added user instance");
-      });
-      new User({
-        username: "user2",
-        email: "user2@email.com",
-        password: bcrypt.hashSync("password"),
-        roles: ["620f227f5a6cfa6ef8038ec5"],
-        requests: [],
-      }).save((err) => {
-        if (err) {
-          console.log("error", err);
-        }
-        console.log("added user instance");
-      });
-      new User({
-        username: "user3",
-        email: "user3@email.com",
-        password: bcrypt.hashSync("password"),
-        roles: ["620f227f5a6cfa6ef8038ec5"],
-        requests: [],
-      }).save((err) => {
-        if (err) {
-          console.log("error", err);
-        }
-        console.log("added user instance");
-      });
-      new User({
-        username: "employee1",
-        email: "employee1@email.com",
-        password: bcrypt.hashSync("password"),
-        roles: ["620f227f5a6cfa6ef8038ec6"],
-        requests: [],
-      }).save((err) => {
-        if (err) {
-          console.log("error", err);
-        }
-        console.log("added employee instance");
-      });
-      new User({
-        username: "employee2",
-        email: "employee2@email.com",
-        password: bcrypt.hashSync("password"),
-        roles: ["620f227f5a6cfa6ef8038ec6"],
-        requests: [],
-      }).save((err) => {
-        if (err) {
-          console.log("error", err);
-        }
-        console.log("added employee instance");
-      });
-      new User({
-        username: "employee3",
-        email: "employee3@email.com",
-        password: bcrypt.hashSync("password"),
-        roles: ["620f227f5a6cfa6ef8038ec6"],
-        requests: [],
-      }).save((err) => {
-        if (err) {
-          console.log("error", err);
-        }
-        console.log("added employee instance");
-      });
-      new User({
-        username: "admin1",
-        email: "admin1@email.com",
-        password: bcrypt.hashSync("password"),
-        roles: ["620f227f5a6cfa6ef8038ec7"],
-        requests: [],
-      }).save((err) => {
-        if (err) {
-          console.log("error", err);
-        }
-        console.log("added admin instance");
-      });
-      new User({
-        username: "admin2",
-        email: "admin2@email.com",
-        password: bcrypt.hashSync("password"),
-        roles: ["620f227f5a6cfa6ef8038ec7"],
-        requests: [],
-      }).save((err) => {
-        if (err) {
-          console.log("error", err);
-        }
-        console.log("added admin instance");
-      });
-      new User({
-        username: "admin3",
-        email: "admin3@email.com",
-        password: bcrypt.hashSync("password"),
-        roles: ["620f227f5a6cfa6ef8038ec7"],
-        requests: [],
-      }).save((err) => {
-        if (err) {
-          console.log("error", err);
-        }
-        console.log("added admin instance");
       });
     }
   });

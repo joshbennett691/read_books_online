@@ -16,6 +16,7 @@ exports.create = (req, res) => {
     employee: req.body.employee,
     authorizer: req.body.authorizer,
     state: req.body.state,
+    chat: req.body.chat,
   });
 
   // Save Request in the database

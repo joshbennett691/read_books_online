@@ -45,9 +45,9 @@ const EditRequest = (props) => {
     // retrieveBook(props.match.params.id);
     retrieveRequest(props.match.params.id);
     retrieveBook(currentRequest.book[0]);
-    console.log("testffffddffffsddsssfffaaaf");
+    console.log("testffffddfffsssfsdsssdsssfffaaaf");
     console.log(currentRequest.state[0]);
-  }, [props.match.params.id]);
+  }, [props.match.params.id, currentRequest.book[0]]);
 
   // const retrieveBook = async (id) => {
   //   await BookService.get(id).then((response) => {

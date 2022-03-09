@@ -10,6 +10,7 @@ db.role = require("./role.model");
 db.book = require("./book.model");
 db.request = require("./request.model");
 db.state = require("./state.model");
+db.chat = require("./chat.model");
 
 db.ROLES = ["user", "admin", "moderator"];
 db.STATES = [

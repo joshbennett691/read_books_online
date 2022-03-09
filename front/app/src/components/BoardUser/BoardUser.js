@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Switch, Route, Link, Redirect } from "react-router-dom";
 import AuthService from "../../services/auth.service";
 import RequestService from "../../services/request.service";
 import axios from "axios";
 import UserService from "../../services/user.service";
 import BookService from "../../services/book.service";
 import EventBus from "../../common/EventBus";
+import Chat from "../Chat/Chat";
 
 //===========================
 // //state ids:
@@ -56,7 +57,7 @@ const BoardUser = () => {
     retrieveBooks();
     mapRequests();
     console.log(requests);
-    console.log("test");
+    console.log("tesssstddfsssf");
     // return () => {
     //   abortController.abort();
     // };
@@ -281,7 +282,7 @@ const BoardUser = () => {
   };
 
   const canEdit = (request) => {
-    console.log(request[1]._id);
+    console.log(request[1]);
     if (
       request[1].state[0] === "620f227f5a6cfa6ef8038ecb" ||
       request[1].state[0] === "620f227f5a6cfa6ef8038ecd"
@@ -314,6 +315,20 @@ const BoardUser = () => {
     }
   };
 
+  const canChat = (request) => {
+    if (request[1].employee.length > 0) {
+      return (
+        <Link
+          to={`/chat/${request[1]._id}`}
+          type="button"
+          className="btn btn-secondary"
+        >
+          Chat
+        </Link>
+      );
+    }
+  };
+
   const renderRequests = () => {
     return requests.map((request) => (
       <tr>
@@ -330,6 +345,7 @@ const BoardUser = () => {
 
         <td>{stateDetect(request)}</td>
         <td>{canEdit(request)}</td>
+        <td>{canChat(request)}</td>
         <td>{canDelete(request)}</td>
       </tr>
     ));

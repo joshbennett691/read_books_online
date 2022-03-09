@@ -34,7 +34,7 @@ const BoardModerator = () => {
   const [currentRequest, setCurrentRequest] = useState({});
   const [currentBook, setCurrentBook] = useState({});
   const [currentIndex, setCurrentIndex] = useState(-1);
-  const [searchTitle, setSearchTitle] = useState("ffddfffddssfd ");
+  const [searchTitle, setSearchTitle] = useState("ffddffffsddsfddssfd ");
   const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
@@ -273,6 +273,20 @@ const BoardModerator = () => {
   //   }
   // };
 
+  const canChat = (request) => {
+    if (request[1].employee.length > 0) {
+      return (
+        <Link
+          to={`/chat/${request[1]._id}`}
+          type="button"
+          className="btn btn-secondary"
+        >
+          Chat
+        </Link>
+      );
+    }
+  };
+
   const canAllocate = (request) => {
     if (request[1].employee.length === 0) {
       return (
@@ -347,6 +361,8 @@ const BoardModerator = () => {
         <td>{retrieveEmployeeName(request[1].employee)}</td>
         {/* <td>{canEdit(request)}</td>
         <td>{canDelete(request)}</td> */}
+        <td>{canChat(request)}</td>
+
         <td>{canAllocate(request)}</td>
       </tr>
     ));
