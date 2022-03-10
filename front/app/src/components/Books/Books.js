@@ -27,7 +27,7 @@ export default class BookList extends Component {
 
   render() {
     return (
-      <table>
+      <table data-testid="form-render">
         <thead>
           <tr>
             <th></th>

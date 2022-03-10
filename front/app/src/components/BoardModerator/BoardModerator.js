@@ -274,7 +274,10 @@ const BoardModerator = () => {
   // };
 
   const canChat = (request) => {
-    if (request[1].employee.length > 0) {
+    if (
+      request[1].employee.length > 0 &&
+      request[1].employee[0] === currentUser.id
+    ) {
       return (
         <Link
           to={`/chat/${request[1]._id}`}
@@ -299,7 +302,8 @@ const BoardModerator = () => {
         </button>
       );
     } else if (
-      request[1].state[0] === "620f227f5a6cfa6ef8038ecc" ||
+      (request[1].employee[0] === currentUser.id &&
+        request[1].state[0] === "620f227f5a6cfa6ef8038ecc") ||
       request[1].state[0] === "620f227f5a6cfa6ef8038ece"
     ) {
       return (

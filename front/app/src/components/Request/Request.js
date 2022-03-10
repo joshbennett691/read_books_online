@@ -140,7 +140,7 @@ const Request = (props) => {
   };
 
   return (
-    <div className="col-md-12">
+    <div data-testid="form-render" className="col-md-12">
       <div className="card card-container">
         <Form onSubmit={handleRequest} ref={form}>
           {!successful && (

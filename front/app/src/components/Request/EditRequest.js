@@ -190,7 +190,7 @@ const EditRequest = (props) => {
     // <div>
     //   {/* <h1>Edit Request</h1> */}f
     // </div>
-    <div>
+    <div data-testid="form-render">
       {currentUser && currentBook ? (
         <div className="edit-form">
           <h4>Request</h4>

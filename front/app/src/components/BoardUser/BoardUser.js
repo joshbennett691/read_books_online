@@ -392,48 +392,11 @@ const BoardUser = () => {
   };
 
   return (
-    <div>
-      {/* <h1>Requests</h1>
-      <Link to={"/request"} type="button" className="btn btn-secondary">
-        Create New Request
-      </Link>
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">Title</th>
-            <th scope="col">Author</th>
-            <th scope="col">Description</th>
-            <th scope="col">Category</th>
-            <th scope="col">Year</th>
-            <th scope="col">Language</th>
-            <th scope="col">Isbn</th>
-            <th scope="col">photo</th>
-            <th scope="col">State</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>{renderRequests()}</tbody>
-      </table> */}
+    <div data-testid="form-render">
       {currentUser ? (
         <div>
           <h1>{content}</h1>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Search by title"
-            value={searchTitle}
-            onChange={onChangeSearchTitle}
-          />
-          <div className="input-group-append">
-            <button
-              className="btn btn-secondary"
-              type="button"
-              onClick={findByTitle}
-            >
-              Search
-            </button>
-          </div>
+
           <Link to={"/request"} type="button" className="btn btn-secondary">
             Create New Request
           </Link>
