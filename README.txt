@@ -12,6 +12,9 @@ Instructions for Building & Running -
 
 	create a data directory in back/app
 
+	navigate to front/app and create a .env file with the content:
+		PORT=8081
+
 	create an instance of a local mongodb through the use of a locally specified mongod.exe, 
 	and specify the dbpath being the data folder that was created
 	
@@ -35,7 +38,8 @@ VM Info -
 	
 	Here are the paths to create an MongoDB instance - 
 	
-		---
+		C:\Users\LabStudent-55-604385\OneDrive` -` Sheffield` Hallam` University\Desktop\Project\MongoDBServer\bin\mongod 
+		--dbpath=C:\Users\LabStudent-55-604385\OneDrive` -` Sheffield` Hallam` University\Desktop\Project\ReadBooksOnline\read_books_online\back\app\data --nojournal
 
 	
 	
