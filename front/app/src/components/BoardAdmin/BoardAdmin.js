@@ -411,7 +411,7 @@ const BoardAdmin = () => {
         </thead>
         <tbody>{renderRequests()}</tbody>
       </table> */}
-      {isAuth() ? (
+      {currentUser && currentUser.roles[0] === "ROLE_ADMIN" ? (
         <div>
           <h1>Requests</h1>
           {/* <Link to={"/request"} type="button" className="btn btn-secondary">

@@ -133,6 +133,7 @@ const BoardUser = () => {
   const deleteRequest = (requestId) => {
     RequestService.deleteRequest(requestId);
     console.log("Request Deleted");
+    window.location.reload(true);
   };
 
   const retrieveBookDesc = (bookId) => {
@@ -252,6 +253,9 @@ const BoardUser = () => {
   const findByTitle = () => {
     RequestService.findByTitle(searchTitle)
       .then((response) => {
+        console.log(requests);
+        console.log(currentUser);
+        console.log(response.data);
         setRequests(response.data);
         console.log(response.data);
       })
@@ -261,6 +265,7 @@ const BoardUser = () => {
   };
 
   const stateDetect = (request) => {
+    console.log(request[1]);
     if (request[1].state[0] === "620f227f5a6cfa6ef8038ecb") {
       return "Awaiting Allocation";
     } else if (request[1].state[0] === "620f227f5a6cfa6ef8038ecc") {
@@ -279,6 +284,18 @@ const BoardUser = () => {
       console.log(request[1].state[0]);
       return "No State";
     }
+  };
+
+  const timeDisplay = (requestTime) => {
+    let updatedTime = requestTime.replace(/\D/g, "");
+    let output = [updatedTime.slice(0, 4), "-", updatedTime.slice(4)].join("");
+    output = [output.slice(0, 7), "-", output.slice(7)].join("");
+    output = [output.slice(0, 10), " ", output.slice(10)].join("");
+    output = [output.slice(0, 13), "-", output.slice(13)].join("");
+    output = [output.slice(0, 16), "-", output.slice(16)].join("");
+    output = [output.slice(0, 19), "-", output.slice(19)].join("");
+    output = output.slice(0, -4);
+    return output;
   };
 
   const canEdit = (request) => {
@@ -344,6 +361,7 @@ const BoardUser = () => {
         </td>
 
         <td>{stateDetect(request)}</td>
+        <td>{timeDisplay(request[1].updatedAt)}</td>
         <td>{canEdit(request)}</td>
         <td>{canChat(request)}</td>
         <td>{canDelete(request)}</td>
@@ -397,9 +415,25 @@ const BoardUser = () => {
         </thead>
         <tbody>{renderRequests()}</tbody>
       </table> */}
-      {isAuth() ? (
+      {currentUser ? (
         <div>
           <h1>{content}</h1>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search by title"
+            value={searchTitle}
+            onChange={onChangeSearchTitle}
+          />
+          <div className="input-group-append">
+            <button
+              className="btn btn-secondary"
+              type="button"
+              onClick={findByTitle}
+            >
+              Search
+            </button>
+          </div>
           <Link to={"/request"} type="button" className="btn btn-secondary">
             Create New Request
           </Link>
@@ -415,6 +449,7 @@ const BoardUser = () => {
                 <th scope="col">Isbn</th>
                 <th scope="col">photo</th>
                 <th scope="col">State</th>
+                <th scope="col">Last Update</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
               </tr>

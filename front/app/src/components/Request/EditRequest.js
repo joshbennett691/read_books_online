@@ -57,6 +57,8 @@ const EditRequest = (props) => {
   // };
 
   const handleInputChange = (event) => {
+    console.log(currentRequest);
+
     console.log(event);
     const { name, value } = event.target;
     setCurrentBook({ ...currentBook, [name]: value });
@@ -84,6 +86,7 @@ const EditRequest = (props) => {
       .then((response) => {
         console.log(response.data);
         setMessage("The Request was updated");
+        window.location = "/user";
       })
       .catch((e) => {
         console.log(e);
@@ -185,13 +188,12 @@ const EditRequest = (props) => {
 
   return (
     // <div>
-    //   {/* <h1>Edit Request</h1> */}
+    //   {/* <h1>Edit Request</h1> */}f
     // </div>
     <div>
-      {currentBook ? (
+      {currentUser && currentBook ? (
         <div className="edit-form">
           <h4>Request</h4>
-          <p>{currentBook._id}</p>
           <form>
             {renderFormInput("title")}
             <div className="form-group">
@@ -284,6 +286,7 @@ const EditRequest = (props) => {
                   onClick={() => costHandle(currentRequest, currentBook)}
                 />
                 <Link
+                  id="button-change"
                   to={"/mod"}
                   type="button"
                   className={styleCost}
@@ -375,10 +378,7 @@ const EditRequest = (props) => {
           )}
         </div>
       ) : (
-        <div>
-          <br />
-          <p>Please click on a Tutorial...</p>
-        </div>
+        <Redirect to="/login" />
       )}
     </div>
   );

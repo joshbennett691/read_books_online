@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --timeout 5000 --exit"
   },
   "author": "",
   "license": "ISC",
@@ -15,5 +15,10 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.0",
     "socket.io": "^4.4.1"
+  },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
+    "mocha": "^9.2.1"
   }
 }

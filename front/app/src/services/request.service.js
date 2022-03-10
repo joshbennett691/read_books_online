@@ -93,6 +93,10 @@ const getAll = () => {
   return http.get("/requests");
 };
 
+const findByTitle = (title) => {
+  return http.get(`/requests?title=${title}`);
+};
+
 export default {
   createRequest,
   createBook,
@@ -104,4 +108,5 @@ export default {
   findAllRequestsByIssuer,
   deleteRequest,
   getAll,
+  findByTitle,
 };

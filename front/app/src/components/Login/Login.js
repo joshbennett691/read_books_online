@@ -18,6 +18,7 @@ const required = (value) => {
 const Login = (props) => {
   const form = useRef();
   const checkBtn = useRef();
+  const currentUser = AuthService.getCurrentUser();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -41,7 +42,7 @@ const Login = (props) => {
     setLoading(true);
 
     form.current.validateAll();
-
+    console.log(currentUser);
     if (checkBtn.current.context._errors.length === 0) {
       AuthService.login(username, password).then(
         () => {
